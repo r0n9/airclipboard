@@ -1,5 +1,9 @@
 # 隔空剪贴板 AirClipboard
 
+[English](./README.md) | 中文
+
+---
+
 [AirClipboard](https://airclipbd.com) 将 Snapdrop 的便捷性与在线剪贴板的功能相结合，实现设备之间的无缝文件共享和剪贴板管理。
 
 ## 功能说明
