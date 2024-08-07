@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Web App Config -->
+    <title data-i18n="title">隔空剪贴板 - AirClipboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" id="theme-color">
+    <meta name="color-scheme" content="dark light">
+    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta name="apple-mobile-web-app-title" content="AirClipboard">
+    <!-- Descriptions -->
+    <meta name="description"
+          content="跨设备文件传输工具。同网络设备可自动发现，支持 Peer2Peer 传输；不同网络分配公开的剪贴板空间，支持文字、图片和文件直接复制粘贴，用于临时保存和分享">
+    <meta name="keywords" content="File, Transfer, Share, Peer2Peer, Clipboard, 跨设备, 文件传输, 隔空投送">
+    <meta property="og:title" content="隔空剪贴板 - AirClipboard">
+    <meta name="og:description"
+          content="跨设备文件传输工具。同网络设备可自动发现，支持 Peer2Peer 传输；不同网络分配公开的剪贴板空间，支持文字、图片和文件直接复制粘贴，用于临时保存和分享">
+    <!-- Icons -->
+    <link rel="icon" sizes="96x96" href="images/favicon-96x96.png">
+    <link rel="shortcut icon" href="images/favicon-96x96.png">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <meta name="msapplication-TileImage" content="images/mstile-150x150.png">
+    <link rel="fluid-icon" type="image/png" href="images/android-chrome-192x192.png">
+    <!-- Resources -->
+    <link rel="stylesheet" type="text/css" href="css/nprogress.min.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/board.css">
+    <meta name="google-adsense-account" content="ca-pub-2528670349879066">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2528670349879066"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<header class="header-container header-row">
+    <a class="site-name" href="/">AirClipboard</a>
+    <div class="row-reverse ">
+        <a href="#about" class="icon-button" title="关于">
+            <svg class="icon">
+                <use xlink:href="#info-outline"/>
+            </svg>
+        </a>
+        <a href="#" id="language-switch" class="icon-button" title="中文/EN">
+            <svg class="icon">
+                <use xlink:href="#icon-language-switch"></use>
+            </svg>
+        </a>
+        <a href="#" id="theme" class="icon-button" title="切换深色/浅色模式">
+            <svg class="icon">
+                <use xlink:href="#icon-theme"/>
+            </svg>
+        </a>
+        <a href="#" id="notification" class="icon-button" title="启用通知" hidden>
+            <svg class="icon">
+                <use xlink:href="#notifications"/>
+            </svg>
+        </a>
+    </div>
+</header>
+<!-- SVG Icon Library -->
+<svg style="display: none;">
+    <symbol id=icon-language-switch viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="4" stroke-linecap="butt" stroke-linejoin="miter">
+        <path d="m42 43-2.385-6M26 43l2.384-6m11.231 0-.795-2-4.18-10h-1.28l-4.181 10-.795 2m11.231 0h-11.23M17 5l1 5M5 11h26M11 11s1.889 7.826 6.611 12.174C22.333 27.522 30 31 30 31"></path>
+        <path d="M25 11s-1.889 7.826-6.611 12.174C13.667 27.522 6 31 6 31"></path>
+    </symbol>
+    <symbol id=wifi-tethering viewBox="0 0 24 24">
+        <path d="M12 11c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 2c0-3.31-2.69-6-6-6s-6 2.69-6 6c0 2.22 1.21 4.15 3 5.19l1-1.74c-1.19-.7-2-1.97-2-3.45 0-2.21 1.79-4 4-4s4 1.79 4 4c0 1.48-.81 2.75-2 3.45l1 1.74c1.79-1.04 3-2.97 3-5.19zM12 3C6.48 3 2 7.48 2 13c0 3.7 2.01 6.92 4.99 8.65l1-1.73C5.61 18.53 4 15.96 4 13c0-4.42 3.58-8 8-8s8 3.58 8 8c0 2.96-1.61 5.53-4 6.92l1 1.73c2.99-1.73 5-4.95 5-8.65 0-5.52-4.48-10-10-10z"></path>
+    </symbol>
+    <symbol id=desktop-mac viewBox="0 0 24 24">
+        <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"></path>
+    </symbol>
+    <symbol id=phone-iphone viewBox="0 0 24 24">
+        <path d="M15.5 1h-8C6.12 1 5 2.12 5 3.5v17C5 21.88 6.12 23 7.5 23h8c1.38 0 2.5-1.12 2.5-2.5v-17C18 2.12 16.88 1 15.5 1zm-4 21c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5-4H7V4h9v14z"></path>
+    </symbol>
+    <symbol id=tablet-mac viewBox="0 0 24 24">
+        <path d="M18.5 0h-14C3.12 0 2 1.12 2 2.5v19C2 22.88 3.12 24 4.5 24h14c1.38 0 2.5-1.12 2.5-2.5v-19C21 1.12 19.88 0 18.5 0zm-7 23c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm7.5-4H4V3h15v16z"></path>
+    </symbol>
+    <symbol id=info-outline viewBox="0 0 24 24">
+        <path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"></path>
+    </symbol>
+    <symbol id=close viewBox="0 0 24 24">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+    </symbol>
+    <symbol id=help-outline viewBox="0 0 24 24">
+        <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"></path>
+    </symbol>
+    <symbol id="twitter">
+        <path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z"/>
+    </symbol>
+    <symbol id="blog">
+        <path d="M 13 3 L 13 22.3125 L 13.1875 22.59375 L 17.78125 29 L 17.90625 29.21875 L 18.75 30.53125 L 22.875 37 L 20.625 37 L 20.34375 37.25 L 14 42.8125 L 14 37 L 11 37 C 8.722656 37 7 35.277344 7 33 L 7 12 C 7 9.722656 8.722656 8 11 8 L 12 8 L 12 6 L 11 6 C 7.675781 6 5 8.675781 5 12 L 5 33 C 5 36.324219 7.675781 39 11 39 L 12 39 L 12 47.21875 L 13.65625 45.75 L 21.375 39 L 40 39 C 43.324219 39 46 36.324219 46 33 L 46 12 C 46 8.675781 43.324219 6 40 6 L 25 6 L 25 3 Z M 15 5 L 23 5 L 23 19.5 L 19.375 18.0625 L 19 17.9375 L 18.625 18.0625 L 15 19.5 Z M 25 8 L 40 8 C 42.277344 8 44 9.722656 44 12 L 44 29 L 20.25 29 L 24.8125 22.59375 L 25 22.3125 Z M 19 20.09375 L 22.96875 21.6875 L 20.625 25 L 17.375 25 L 15.03125 21.6875 Z M 21.40625 31 L 44 31 L 44 33 C 44 35.277344 42.277344 37 40 37 L 25.21875 37 Z"/>
+    </symbol>
+    <symbol id="github">
+        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+    </symbol>
+    <g id="notifications">
+        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+    </g>
+    <symbol id="homescreen">
+        <path fill="none" d="M0 0h24v24H0V0z"/>
+        <path d="M18 1.01L8 1c-1.1 0-2 .9-2 2v3h2V5h10v14H8v-1H6v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM10 15h2V8H5v2h3.59L3 15.59 4.41 17 10 11.41z"/>
+        <path fill="none" d="M0 0h24v24H0V0z"/>
+    </symbol>
+    <symbol id="monetarization">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/>
+    </symbol>
+    <symbol id="icon-theme" viewBox="0 0 24 24">
+        <rect fill="none" height="24" width="24"/>
+        <path d="M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36c-0.98,1.37-2.58,2.26-4.4,2.26 c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/>
+    </symbol>
+</svg>
+<!-- Toast -->
+<div class="full center toast-container">
+    <x-toast class="row" shadow="1" id="toast"></x-toast>
+</div>
+<div class="airdrop">
+    <div style="width: 145px; text-align: center">
+        <div id="self-display" class="column-center">
+            <svg class="icon logo">
+                <use xlink:href="#wifi-tethering"/>
+            </svg>
+            <div id="displayName" placeholder="文件传输" data-i18n-placeholder="file-transfer"></div>
+            <div class="font-body2" data-i18n="tip2">同网络设备可自动发现</div>
+            <div id="qrcode"></div>
+        </div>
+    </div>
+    <div style="flex: 1">
+        <x-peers class="center"></x-peers>
+        <x-no-peers>
+            <h3 data-i18n="no-peers">在其他设备上打开当前页面或扫描左侧二维码</h3>
+        </x-no-peers>
+        <x-instructions class="center" desktop="点击发送文件或右键点击发送消息"
+                        mobile="轻触发送文件或长按发送消息"></x-instructions>
+    </div>
+</div>
+
+<div class="clipboard">
+    <div style="display: flex; align-items: center;">
+        <h2 class="mt-3" data-i18n="clipboard">隔空剪贴板</h2>
+        <span class="font-body3"
+              style="margin-left: 10px; font-weight: bold; background-color: var(--primary-color); padding: 2px; border-radius: 5px;">
+        <input id="board-input" type="text" value="{{ .Board }}" class="board-input" onkeydown="handleKeyDown(event)"
+               onblur="handleBlur()"/>
+        </span>
+        <div class="tooltip-icon" id="tooltip-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2h-2zm0 4h2v6h-2z"
+                      fill="red"/>
+            </svg>
+        </div>
+    </div>
+    <div class="input-container">
+        <textarea id="messageInput"
+                  placeholder="不同网络设备间传输文本、图片和文件，复制粘贴在这里！或者在此处编辑文本, 按 Shift+Enter 换行, 按 Enter 即可自动添加记录。"
+                  data-i18n-placeholder="message-input"></textarea>
+    </div>
+    <span style="color: red; font-size: 12px;"
+          data-i18n="declaration">声明：请勿在此传输涉及重要机密或个人隐私的信息。如造成信息泄露、丢失或其他任何后果，AirClipboard 概不承担责任！</span>
+    <div style="display: flex; align-items: center;">
+        <h2 class="mt-3" data-i18n="history">剪贴板历史</h2>
+        <span id="countdown" class="countdown"></span>
+    </div>
+    <div>
+        <ul id="messages" class="messages"></ul>
+    </div>
+</div>
+
+<div style="padding-bottom: 2rem">
+    <p style="text-align: center; font-size: 10px;">
+        Powered by <a target="_blank" href="https://blog.airclipbd.com/2024/07/05/airclipbd-0705/">AirClipboard</a> v2.2.2-20240715
+    </p>
+</div>
+
+<!-- Receive Dialog -->
+<x-dialog id="receiveDialog">
+    <x-background class="full center">
+        <x-paper shadow="2">
+            <h3 data-i18n="file-received">文件已接收</h3>
+            <div class="font-subheading" id="fileName">Filename</div>
+            <div class="font-body2" id="fileSize"></div>
+            <div class='preview' style="visibility: hidden;">
+                <img id='img-preview' src="">
+            </div>
+            <div class="row">
+                <label for="autoDownload" class="grow" data-i18n="ask2save">在下载前询问是否保存每个文件</label>
+                <input type="checkbox" id="autoDownload" checked="">
+            </div>
+            <div class="row-reverse">
+                <a class="button" close id="download" title="下载文件" data-i18n="save" autofocus>保存</a>
+                <button class="button" close data-i18n="ignore">忽略</button>
+            </div>
+        </x-paper>
+    </x-background>
+</x-dialog>
+<!-- Send Text Dialog -->
+<x-dialog id="sendTextDialog">
+    <form action="#">
+        <x-background class="full center">
+            <x-paper shadow="2">
+                <h3 data-i18n="send-msg">发送消息</h3>
+                <div id="textInput" class="textarea" role="textbox" placeholder="发送消息"
+                     data-i18n-placeholder="send-msg"
+                     autocomplete="off"
+                     contenteditable></div>
+                <div class="row-reverse">
+                    <button class="button" type="submit" close data-i18n="send">发送</button>
+                    <a class="button" close data-i18n="cancel">取消</a>
+                </div>
+            </x-paper>
+        </x-background>
+    </form>
+</x-dialog>
+<!-- Receive Text Dialog -->
+<x-dialog id="receiveTextDialog">
+    <x-background class="full center">
+        <x-paper shadow="2">
+            <h3 data-i18n="msg-received">消息已接收</h3>
+            <div class="font-subheading" id="text"></div>
+            <div class="row-reverse">
+                <button class="button" id="copy" close autofocus data-i18n="copy">复制</button>
+                <button class="button" close data-i18n="close">关闭</button>
+            </div>
+        </x-paper>
+    </x-background>
+</x-dialog>
+<!-- About Page -->
+<x-about id="about" class="full center column">
+    <section class="center column fade-in">
+        <header class="row-reverse">
+            <a href="#" class="close icon-button">
+                <svg class="icon">
+                    <use xlink:href="#close"/>
+                </svg>
+            </a>
+        </header>
+        <svg class="icon logo">
+            <use xlink:href="#wifi-tethering"/>
+        </svg>
+        <h1 data-i18n="title">隔空剪贴板 - AirClipboard</h1>
+        <div class="font-subheading" data-i18n="desc">跨设备传输文件的最简便的方法</div>
+        <div style="font-size:10px;"> Reference and thanks to
+            <a href="https://github.com/RobinLinus/snapdrop" target="_blank">Snapdrop</a>
+        </div>
+        <div class="row">
+            <div><img src="images/donate.jpg" style="width: 240px"></div>
+        </div>
+        <div class="row">
+            <a class="icon-button" target="_blank" href="https://github.com/r0n9/airclipboard"
+               title="r0n9 on Github" rel="noreferrer">
+                <svg class="icon">
+                    <use xlink:href="#github"/>
+                </svg>
+            </a>
+            <a class="icon-button" target="_blank" href="https://paypal.me/r0n9fan" title="Help cover the server costs!"
+               rel="noreferrer">
+                <svg class="icon">
+                    <use xlink:href="#monetarization"/>
+                </svg>
+            </a>
+            <a class="icon-button" target="_blank" href="https://blog.airclipbd.com" title="My Blog" rel="noreferrer">
+                <img src="images/blogger-5-512.png" alt="Blog Icon" width="24" height="24">
+            </a>
+            <a class="icon-button" target="_blank" href="https://blog.airclipbd.com/2024/07/05/airclipbd-0705/"
+               title="About Airclipbd" rel="noreferrer">
+                <svg class="icon">
+                    <use xlink:href="#help-outline"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+    <x-background></x-background>
+</x-about>
+
+<script type="text/javascript">
+    // 将Gin传入的参数Board赋值给一个全局变量
+    var board = "{{ .Board }}";
+</script>
+
+<script src="scripts/qrcode.min.js"></script>
+<script src="scripts/nprogress.min.js"></script>
+<script src="scripts/board.min.js"></script>
+<script src="scripts/theme.min.js" async></script>
+<script src="scripts/network.min.js"></script>
+<script src="scripts/ui.min.js"></script>
+<script src="scripts/clipboard.js" async></script>
+<!-- Sounds -->
+<audio id="blop" autobuffer="true">
+    <source src="sounds/blop.mp3" type="audio/mpeg">
+    <source src="sounds/blop.ogg" type="audio/ogg">
+</audio>
+<!-- no script -->
+<noscript>
+    <x-noscript class="full center column">
+        <h1>Enable JavaScript</h1>
+        <h3>AirClip works only with JavaScript</h3>
+    </x-noscript>
+    <style>
+        x-noscript {
+            background: #599cfc;
+            color: white;
+            z-index: 2;
+        }
+
+        a[href="#info"] {
+            color: white;
+        }
+    </style>
+</noscript>
+</body>
+</html>

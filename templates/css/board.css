@@ -1,0 +1,304 @@
+@font-face {
+    font-family: "iconfont";
+    src: url('iconfont.eot?t=1526122643406');
+    /* IE9*/
+    src: url('iconfont.eot?t=1526122643406#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'), url('iconfont.ttf?t=1526122643406') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/ url('iconfont.svg?t=1526122643406#iconfont') format('svg');
+    /* iOS 4.1- */
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-copy:before {
+    content: "\e706";
+}
+
+.icon-remove:before {
+    content: "\e66c";
+}
+
+.icon-plus:before {
+    content: "\e61f";
+}
+
+.icon-edit:before {
+    content: "\e65c";
+}
+
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 360px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.site-name {
+    font-size: 1.5em; /* Adjust the size as needed */
+    text-decoration: none; /* Remove underline */
+    color: var(--text-color);
+}
+
+.airdrop {
+    min-height: 220px;
+    margin: 10px 10px 10px 10px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: var(--box-shadow);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.clipboard {
+    margin: 10px 10px 10px 10px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: var(--box-shadow);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-container {
+    margin-right: 20px;
+}
+
+.input-container textarea {
+    color: var(--text-color);
+    background-color: var(--bg-color-secondary);
+    width: 100%;
+    padding: 10px 0px 10px 10px;
+    font-size: 16px;
+    height: 100px;
+}
+
+.messages {
+    list-style: none;
+    padding: 0;
+    margin: 0px;
+}
+
+.messages li {
+    min-height: 10px;
+    color: var(--text-color);
+    background-color: var(--bg-color-secondary);
+    margin-bottom: 10px;
+    padding: 1rem;
+    border-radius: 5px;
+    white-space: pre-wrap; /* 支持换行符 */
+    word-wrap: break-word;
+    position: relative;
+}
+
+.messages img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    max-height: 200px;
+
+    cursor: pointer;
+    transition: transform 0.3s, height 0.3s;
+}
+
+.buttons {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.buttons button {
+    margin-left: 5px;
+}
+
+.alert-primary {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+}
+
+.alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+.btn-sm {
+    font-size: .875rem;
+    line-height: 1.5;
+    border-radius: .2rem
+}
+
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .0rem .35rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out
+}
+
+.buttons .btn i {
+    display: inline-block;
+    line-height: 1.8;
+    vertical-align: middle;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d
+}
+
+.share {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.url-text {
+    word-break: break-all;
+}
+
+/* 自定义 NProgress 进度条的颜色和高度 */
+#nprogress .bar {
+    background: var(--primary-color); /* 将进度条的颜色设置为蓝色 */
+    height: 2px; /* 将进度条的高度设置为默认 2px */
+}
+
+/* 倒计时容器 */
+#countdown {
+    display: inline-block;
+    padding: 5px 10px;
+    color: var(--text-color);
+    background-color: var(--bg-color-secondary);
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+/* 单独的时间部分 */
+.countdown-part {
+    display: inline-block;
+    min-width: 1em;
+    text-align: center;
+}
+
+/* 时间之间的分隔符 */
+.countdown-separator {
+    margin: 0 2px;
+}
+
+/* 响应式调整 */
+@media (max-width: 600px) {
+    #countdown {
+        font-size: 1em;
+    }
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.overlay img {
+    max-width: 90%;
+    max-height: 90%;
+    transition: transform 0.3s;
+}
+
+.overlay img.expanded {
+    transform: scale(1.1);
+}
+
+.tooltip-icon {
+    visibility: hidden;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    min-width: 330px; /* Limit the max width to viewport width minus 20px (10px on each side) */
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: fixed; /* Fixed position to ensure it stays centered */
+    z-index: 1;
+    left: -80px; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Translate to center */
+    transition: opacity 0.3s;
+    white-space: normal; /* Allow text wrapping */
+    word-wrap: break-word; /* Ensure long words are wrapped */
+    bottom: -105px;
+}
+
+.tooltip-icon:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.board-input {
+    border: 2px solid var(--primary-color);
+    background: var(--bg-color-secondary);
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 1.0em;
+    height: 1em;
+    width: 5em;
+}
