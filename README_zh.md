@@ -41,7 +41,7 @@
 1. **克隆项目仓库**
 
    ```bash
-   git clone https://github.com/yourusername/airclipboard.git
+   git clone https://github.com/r0n9/airclipboard.git
    cd airclipboard
    ```
 
