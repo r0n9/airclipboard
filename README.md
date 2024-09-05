@@ -73,16 +73,14 @@ To install and start using AirClipboard, follow these steps:
 
 5. **Alternatively, Start with Docker**
 
-    - Build the Docker image:
-
-      ```bash
-      docker build -t airclipboard .
-      ```
-
     - Run the Docker container:
 
       ```bash
-      docker run -p 18128:18128 airclipboard --cache-type=redis --redis-addr=localhost:6379 --redis-password=yourpassword --redis-db=0
+      # start with memory cache
+      docker run -p 18128:18128 r0n9/airclipboard
+      
+      # start with redis cache
+      docker run -p 18128:18128 r0n9/airclipboard --cache-type=redis --redis-addr=localhost:6379 --redis-password=yourpassword --redis-db=0
       ```
 6. **visit `http://your-host-ip:18128` and enjoy**
 

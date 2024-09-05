@@ -73,16 +73,14 @@
 
 5. **或使用 Docker 启动**
 
-    - 构建 Docker 镜像：
-
-      ```bash
-      docker build -t airclipboard .
-      ```
-
     - 运行 Docker 容器：
 
       ```bash
-      docker run -p 18128:18128 airclipboard --cache-type=redis --redis-addr=localhost:6379 --redis-password=yourpassword --redis-db=0
+      # start with memory cache
+      docker run -p 18128:18128 r0n9/airclipboard
+      
+      # start with redis cache
+      docker run -p 18128:18128 r0n9/airclipboard --cache-type=redis --redis-addr=localhost:6379 --redis-password=yourpassword --redis-db=0
       ```
 
 6. **即可访问 `http://your-host-ip:18128`**
