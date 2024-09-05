@@ -6,7 +6,7 @@ exe-filename=airclipboard
 
 #os-archs=darwin:amd64 darwin:arm64 freebsd:386 freebsd:amd64 linux:386 linux:amd64 linux:arm linux:arm64 windows:386 windows:amd64 linux:mips64 linux:mips64le linux:mips:softfloat linux:mipsle:softfloat
 
-os-archs=linux:amd64
+os-archs=linux:amd64 windows:amd64 darwin:amd64 darwin:arm64
 
 all: build
 
@@ -23,4 +23,4 @@ app:
 		echo "Build $${os}-$${arch} done";\
 	)
 #	@mv ./release/page_windows_386 ./release/page_windows_386.exe
-#	@mv ./release/$(exe-filename)_windows_amd64 ./release/$(exe-filename)_windows_amd64.exe
+	@mv ./release/$(exe-filename)_windows_amd64 ./release/$(exe-filename)_windows_amd64.exe

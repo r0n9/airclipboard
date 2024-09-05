@@ -28,6 +28,8 @@ document.getElementById('messageInput').addEventListener('keydown', function (ev
     }
 });
 
+document.getElementById("sendButton").addEventListener("click", addMessage);
+
 document.getElementById('messageInput').addEventListener('paste', function (event) {
     const items = (event.clipboardData || event.originalEvent.clipboardData).items;
     const maxSize = 20 * 1024 * 1024; // 20MB
@@ -68,6 +70,7 @@ document.getElementById('messageInput').addEventListener('paste', function (even
         }
     }
 });
+
 
 function fetchMessages() {
     NProgress.start();
