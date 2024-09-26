@@ -1,76 +1,223 @@
-// 获取当前页面的URL
-const currentUrl = window.location.href;
-
-// 获取传入的Board参数
-console.log(board);
-window.board = board
-
-// 生成二维码并展示在页面上
-let qrcodeUrl = currentUrl
-if (new URL(window.location.href).pathname === "/") {
-    qrcodeUrl = currentUrl + board
-}
-const qrcode = new QRCode(document.getElementById("qrcode"), {
-    text: qrcodeUrl, width: 128, height: 128
-});
-
-
 NProgress.configure({showSpinner: false});
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    fetchMessages();
-});
+const version = 'v2.3.1-20240926';
 
-document.getElementById('messageInput').addEventListener('keydown', function (event) {
-    if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault();
-        addMessage();
-    }
-});
+window.collapsed = false
 
-document.getElementById("sendButton").addEventListener("click", addMessage);
+let isSmallScreen = false;
 
-document.getElementById('messageInput').addEventListener('paste', function (event) {
-    const items = (event.clipboardData || event.originalEvent.clipboardData).items;
-    const maxSize = 20 * 1024 * 1024; // 20MB
+const contentData = {
+    small: `
+        <div class="airdrop">
+        <div style="width: 145px; text-align: center">
+            <div id="self-display" class="column-center">
+                <svg class="icon logo">
+                    <use xlink:href="#wifi-tethering"/>
+                </svg>
+                <div id="displayName" placeholder="文件传输" data-i18n-placeholder="file-transfer"></div>
+                <div class="font-body2" data-i18n="tip2">同网络设备可自动发现</div>
+                <div id="qrcode"></div>
+            </div>
+        </div>
+        <div style="flex: 1">
+            <x-peers class="center"></x-peers>
+            <x-no-peers>
+                <h3 data-i18n="no-peers">在其他设备上打开当前页面或扫描左侧二维码</h3>
+            </x-no-peers>
+            <x-instructions class="center" desktop="点击发送文件或右键点击发送消息"
+                            mobile="轻触发送文件或长按发送消息"></x-instructions>
+        </div>
+    </div>
+    <div class="clipboard">
+        <div style="display: flex; align-items: center;">
+            <h2 class="mt-3" data-i18n="clipboard">隔空剪贴板</h2>
+            <span class="font-body3"
+                  style="margin-left: 10px; font-weight: bold; background-color: var(--primary-color); padding: 2px; border-radius: 5px;">
+        <input id="board-input" type="text" value="${board}" class="board-input" onkeydown="handleKeyDown(event)"
+               onblur="handleBlur()"/>
+        </span>
+            <div class="tooltip-icon" id="tooltip-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2h-2zm0 4h2v6h-2z"
+                          fill="red"/>
+                </svg>
+            </div>
+        </div>
+        <div class="input-container">
+        <textarea id="messageInput"
+                  placeholder="不同网络设备间传输文本、图片和文件，复制粘贴在这里！或者在此处编辑文本, 按 Shift+Enter 换行, 按 Enter 即可自动添加记录。"
+                  data-i18n-placeholder="message-input"></textarea>
+        </div>
+        <div>
+            <button id="sendButton" class="btn btn-primary" data-i18n="send" style="width: 100px">发送</button>
+        </div>
+        <span style="color: red; font-size: 12px;"
+              data-i18n="declaration">声明：请勿在此传输涉及重要机密或个人隐私的信息。如造成信息泄露、丢失或其他任何后果，AirClipboard 概不承担责任！
+        </span>
+        <div style="display: flex; align-items: center;">
+            <h2 class="mt-3" data-i18n="history">剪贴板历史</h2>
+            <span id="countdown" class="countdown"></span>
+        </div>
+        <div>
+            <ul id="messages" class="messages"></ul>
+        </div>
+    </div>
 
-    const handleFile = (file) => {
-        if (file.size > maxSize) {
-            alert('The file size exceeds the 20MB limit.');
-            return;
+    <div style="margin-bottom: 2rem;">
+        <p style="text-align: center; font-size: 10px;">
+            Powered by <a target="_blank" href="https://github.com/r0n9/airclipboard">AirClipboard</a>
+            ${version}
+        </p>
+    </div>
+    `,
+    large: `
+    <div class="snapdrop-body">
+        <!-- Peers -->
+        <x-peers class="center"></x-peers>
+        <x-no-peers>
+            <h2 data-i18n="no-peers">在其他设备上打开当前页面\n或扫描左侧二维码</h2>
+        </x-no-peers>
+        <x-instructions desktop="Click to send files or right click to send a message" mobile="Tap to send files or long tap to send a message">
+        </x-instructions>
+        <!-- Footer -->
+        <footer class="column">
+            <svg class="icon logo" style="--icon-size: 80px">
+                <use xlink:href="#wifi-tethering" />
+            </svg>
+            <div id="displayName" placeholder="跨设备传输文件的最简便的方法"></div>
+            <div class="font-body2" data-i18n="tip2">同一个局网线下的设备可自动发现</div>
+        </footer>
+    </div>
+    <div id="card" class="clipboard card">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px; width: 100%;">
+            <div id="qrcode"></div>
+            <button id="toggleButton">
+                <!-- SVG 图标，点击后收缩或展开 -->
+                <svg id="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M14 7l-5 5 5 5z"></path> <!-- 向左箭头 -->
+                </svg>
+            </button>
+        </div>
+        <div id="collapsed-space">
+            <div style="display: flex; align-items: center;">
+                <h2 class="mt-3" data-i18n="clipboard">隔空剪贴板</h2>
+                <span class="font-body3" style="margin-left: 10px; font-weight: bold; background-color: var(--primary-color); padding: 2px; border-radius: 5px;">
+                    <input id="board-input" type="text" value="${board}" class="board-input" onkeydown="handleKeyDown(event)" onblur="handleBlur()"/>
+                </span>
+                <div class="tooltip-icon" id="tooltip-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2h-2zm0 4h2v6h-2z"
+                              fill="red"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="input-container">
+                <textarea id="messageInput"
+                      placeholder="不同网络设备间传输文本、图片和文件，复制粘贴在这里！或者在此处编辑文本, 按 Shift+Enter 换行, 按 Enter 即可自动添加记录。"
+                      data-i18n-placeholder="message-input"></textarea>
+            </div>
+            <div>
+                <button id="sendButton" class="btn btn-primary" data-i18n="send" style="width: 100px">发送</button>
+            </div>
+            <span style="color: red; font-size: 12px;"
+                  data-i18n="declaration">声明：请勿在此传输涉及重要机密或个人隐私的信息。如造成信息泄露、丢失或其他任何后果，AirClipboard 概不承担责任！
+            </span>
+            <div style="display: flex; align-items: center;">
+                <h2 class="mt-3" data-i18n="history">剪贴板历史</h2>
+                <span id="countdown" class="countdown"></span>
+            </div>
+            <div>
+                <ul id="messages" class="messages"></ul>
+            </div>
+    
+            <div style="margin-bottom: 2rem;">
+                <p style="text-align: center; font-size: 10px;">
+                    Powered by <a target="_blank" href="https://github.com/r0n9/airclipboard">AirClipboard</a>
+                    ${version}
+                </p>
+            </div>
+        </div>
+    </div>
+    `
+};
+
+updateContent();
+
+function addMessageInputListener(event) {
+
+    document.getElementById('messageInput').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            addMessage();
         }
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const base64Image = e.target.result;
-            const message = `${file.name}#${base64Image}`;
-            sendMessage(message);
-        };
-        reader.readAsDataURL(file);
-    };
+    });
 
-    const handleText = (item) => {
-        item.getAsString((text) => {
-            if (new Blob([text]).size > maxSize) {
-                alert('The text size exceeds the 20MB limit.');
+    document.getElementById("sendButton").addEventListener("click", addMessage);
+
+    document.getElementById('messageInput').addEventListener('paste', function (event) {
+        const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+        const maxSize = 20 * 1024 * 1024; // 20MB
+
+        const handleFile = (file) => {
+            if (file.size > maxSize) {
+                alert('The file size exceeds the 20MB limit.');
                 return;
             }
-            sendMessage(text);
-        });
-    };
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64Image = e.target.result;
+                const message = `${file.name}#${base64Image}`;
+                sendMessage(message);
+            };
+            reader.readAsDataURL(file);
+        };
 
-    for (const item of items) {
-        // alert(`item.kind: ${item.kind} item.type: ${item.type}`);
-        // if (item.kind === 'file' && item.type.startsWith('image/')) {
-        if (item.kind === 'file') {
-            handleFile(item.getAsFile());
-            event.preventDefault();
-        } else if (item.kind === 'string' && item.type === 'text/plain') {
-            handleText(item);
-            event.preventDefault();
+        const handleText = (item) => {
+            item.getAsString((text) => {
+                if (new Blob([text]).size > maxSize) {
+                    alert('The text size exceeds the 20MB limit.');
+                    return;
+                }
+                sendMessage(text);
+            });
+        };
+
+        for (const item of items) {
+            // alert(`item.kind: ${item.kind} item.type: ${item.type}`);
+            // if (item.kind === 'file' && item.type.startsWith('image/')) {
+            if (item.kind === 'file') {
+                handleFile(item.getAsFile());
+                event.preventDefault();
+            } else if (item.kind === 'string' && item.type === 'text/plain') {
+                handleText(item);
+                event.preventDefault();
+            }
         }
-    }
-});
+    });
 
+    if (document.getElementById('toggleButton')) {
+        document.getElementById('toggleButton').addEventListener('click', function () {
+            const card = document.getElementById('card');
+            // 切换卡片的收缩状态
+            card.classList.toggle('collapsed');
+
+            const collapsedSpace = document.getElementById('collapsed-space');
+            if (window.collapsed) {
+                collapsedSpace.style.display = 'block';
+                window.collapsed = false;
+                // 更改为向左箭头
+                const icon = document.getElementById('icon');
+                icon.innerHTML = '<path d="M14 7l-5 5 5 5z"></path>'; // 向左箭头
+            } else {
+                collapsedSpace.style.display = 'none';
+                window.collapsed = true;
+                // 更改为向右箭头
+                const icon = document.getElementById('icon');
+                icon.innerHTML = '<path d="M10 7l5 5-5 5z"></path>'; // 向右箭头
+            }
+        });
+    }
+}
 
 function fetchMessages() {
     NProgress.start();
@@ -84,6 +231,11 @@ function fetchMessages() {
                 messageList.innerHTML = '';  // 清空现有的消息
 
                 if (messages && messages.length == 0) {
+                    const card = document.getElementById('card');
+                    if (card) {
+                        card.style.width = '26%';
+                        card.style.backgroundColor = 'var(--bg-color-card)';
+                    }
                     const messageList = document.getElementById('messages');
                     const alertMessage = document.createElement('div');
                     alertMessage.className = 'alert alert-primary';
@@ -97,6 +249,11 @@ function fetchMessages() {
                     alertMessage.id = 'alert-message';
                     messageList.appendChild(alertMessage);
                 } else {
+                    const card = document.getElementById('card');
+                    if (card) {
+                        card.style.width = '70%';
+                        card.style.backgroundColor = 'var(--bg-color)';
+                    }
                     messages.forEach(message => {
                         appendMessage(message, false);
                     });
@@ -134,6 +291,11 @@ function sendMessage(content) {
     }).then(response => response.json())
         .then(data => {
             if (data.code == 200 && data.data.messages && data.data.messages.length > 0) {
+                const card = document.getElementById('card');
+                if (card) {
+                    card.style.width = '70%';
+                    card.style.backgroundColor = 'var(--bg-color)';
+                }
                 updateCountdown(data.data.expireAt)
                 appendMessage(data.data.messages[0], true);
                 snapdrop.send({type: 'board-update', board: window.board})
@@ -327,6 +489,12 @@ function deleteMessage(id, messageElement) {
                 messageElement.remove();
 
                 if (data.data.messages && data.data.messages.length == 0) {
+                    const card = document.getElementById('card');
+                    if (card) {
+                        card.style.width = '26%';
+                        card.style.minWidth = '400px';
+                        card.style.backgroundColor = 'var(--bg-color-card)';
+                    }
                     const messageList = document.getElementById('messages');
                     messageList.innerHTML = '';  // 清空现有的消息
                     const alertMessage = document.createElement('div');
@@ -442,10 +610,6 @@ function switchLanguageOnload(lang) {
     });
 }
 
-// 获取倒计时显示元素
-const countdownElement = document.getElementById('countdown');// 设置提示文本
-countdownElement.title = "到期将自动清理剪切板";
-
 // 函数：更新倒计时
 let interval;
 
@@ -472,6 +636,11 @@ function updateCountdown(expireAt) {
         const hoursStr = String(hours).padStart(2, '0');
         const minutesStr = String(minutes).padStart(2, '0');
         const secondsStr = String(seconds).padStart(2, '0');
+
+
+        // 获取倒计时显示元素
+        const countdownElement = document.getElementById('countdown');// 设置提示文本
+        countdownElement.title = "到期将自动清理剪切板";
 
         // 更新倒计时显示内容
         countdownElement.innerHTML = `
@@ -545,3 +714,63 @@ function navigateToBoard() {
         }
     }
 }
+
+function updateContent() {
+    const width = window.innerWidth;
+    const contentDiv = document.getElementById('content');
+
+    if (width < 768) {
+        isSmallScreen = true;
+        contentDiv.innerHTML = contentData.small;
+    } else {
+        isSmallScreen = false
+        contentDiv.innerHTML = contentData.large;
+    }
+
+    // 获取当前页面的URL
+    const currentUrl = window.location.href;
+
+    // 获取传入的Board参数
+    console.log(board);
+    window.board = board
+
+    // 生成二维码并展示在页面上
+    let qrcodeUrl = currentUrl
+    if (new URL(window.location.href).pathname === "/") {
+        qrcodeUrl = currentUrl + board
+    }
+    const qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: qrcodeUrl, width: 128, height: 128
+    });
+
+    addMessageInputListener();
+
+    fetchMessages();
+
+    window.collapsed = false;
+
+}
+
+function handleResize() {
+    const width = window.innerWidth;
+
+    if (width < 768 && !isSmallScreen) {
+        location.reload()
+    }
+
+    if (width >= 768 && isSmallScreen) {
+        location.reload()
+    }
+}
+
+let resizeTimeout;
+
+function debounce(func, delay) {
+    return function () {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(func, delay);
+    };
+}
+
+window.addEventListener('resize', debounce(handleResize, 300));
+

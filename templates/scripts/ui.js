@@ -582,6 +582,12 @@ window.addEventListener('beforeinstallprompt', e => {
 
 // Background Animation
 Events.on('load', () => {
+
+    let width = window.innerWidth;
+    if (width < 768) {
+        return;
+    }
+
     let c = document.createElement('canvas');
     document.body.appendChild(c);
     let style = c.style;
@@ -598,8 +604,10 @@ Events.on('load', () => {
         h = window.innerHeight;
         c.width = w;
         c.height = h;
-        x0 = 99;
-        y0 = 112;
+        let offset = h > 380 ? 100 : 65;
+        offset = h > 800 ? 116 : offset;
+        x0 = w / 2;
+        y0 = h - offset;
         dw = Math.max(w, h, 1000) / 13;
         drawCircles();
     }

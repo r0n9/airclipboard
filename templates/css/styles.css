@@ -27,6 +27,16 @@ body {
     justify-content: center;
 }
 
+.snapdrop-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    overflow-y: hidden;
+    height: 80vh;
+}
+
 .row-reverse {
     display: flex;
     flex-direction: row-reverse;
@@ -185,7 +195,7 @@ x-peers {
     width: 100%;
     overflow: hidden;
     flex-flow: row wrap;
-    z-index: 2;
+    /*z-index: 2;*/
 }
 
 /* Empty Peers List */
@@ -202,6 +212,9 @@ x-no-peers {
 x-no-peers h2,
 x-no-peers a {
     color: var(--primary-color);
+
+    white-space: pre-wrap; /* 支持换行符 */
+    word-wrap: break-word;
 }
 
 x-peers:not(:empty) + x-no-peers {
@@ -611,7 +624,7 @@ button::-moz-focus-inner {
     padding: 0 8px 24px;
     overflow: hidden;
     pointer-events: none;
-    z-index: 9999; /* 确保在最前面显示，可以调整这个值 */
+    z-index: 80; /* 确保在最前面显示，可以调整这个值 */
 }
 
 x-toast {
@@ -701,6 +714,7 @@ body {
     --text-color: #333;
     --bg-color: #fff;
     --bg-color-secondary: #f1f3f4;
+    --bg-color-card: rgba(248, 249, 250, 0.2);
     --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);;
 }
 
@@ -709,6 +723,7 @@ body.dark-theme {
     --text-color: #eee;
     --bg-color: #121212;
     --bg-color-secondary: #333;
+    --bg-color-card: rgba(248, 249, 250, 0.2);
     --box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
@@ -740,11 +755,12 @@ x-dialog x-paper {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 128px;
 
     display: inline-block; /* 确保容器被正确识别为内联块元素 */
-    border: 3px solid white; /* 白色边框 */
+    border: 2px solid white; /* 白色边框 */
     padding: 1px; /* 可选：为边框和图像之间添加一些填充 */
-    background-color: white; /* 可选：确保背景色为白色 */
+    /*background-color: white; !* 可选：确保背景色为白色 *!*/
 }
 
 #qrcode canvas {

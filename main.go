@@ -106,6 +106,10 @@ func initRoute(e *gin.Engine) {
 	e.GET("/:board", func(c *gin.Context) {
 		board := c.Param("board")
 		board = truncateBoard(board)
+		if board == "index." {
+			// 生成6位随机字符串，只包含数字和小写字母
+			board = common.RandString(6)
+		}
 		c.Header("Set-Cookie", "board="+board+";SameSite=Strict;Secure")
 		c.HTML(200, "index.html", gin.H{"Board": board})
 	})

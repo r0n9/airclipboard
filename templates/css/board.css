@@ -84,7 +84,7 @@ body {
     width: 100%;
     padding: 10px 0px 10px 10px;
     font-size: 16px;
-    height: 100px;
+    height: 108px;
 }
 
 .messages {
@@ -110,7 +110,6 @@ body {
     height: auto;
     border-radius: 5px;
     max-height: 200px;
-
     cursor: pointer;
     transition: transform 0.3s, height 0.3s;
 }
@@ -301,4 +300,51 @@ body {
     font-size: 1.0em;
     height: 1em;
     width: 5em;
+}
+
+.card {
+    position: fixed;
+    top: 50px;
+    left: 5px;
+    height: 85vh;
+    width: 26%;
+    min-width: 400px;
+    background-color: rgba(248, 249, 250, 0.2); /* 背景全透明 */
+    border: 1px solid rgba(204, 204, 204, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease; /* 添加 height 过渡 */
+    overflow: auto;
+}
+
+.card.collapsed {
+    height: 152px;
+    width: 200px !important;
+    min-width: 200px!important;
+}
+
+#toggleButton {
+    width: 30px;
+    height: 128px;
+    background: none;
+    border: none;
+    cursor: pointer; /* 鼠标移上去时变成手型 */
+    padding: 10px;
+    display: inline-flex; /* 确保按钮包裹住图标 */
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px; /* 圆角效果 */
+    margin-right: 20px;
+    margin-left: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+    transition: box-shadow 0.3s ease; /* 平滑阴影动画 */
+}
+
+#toggleButton:hover {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.6); /* 阴影效果 */
+}
+
+#icon {
+    fill: var(--primary-color); /* 通过 CSS 设置颜色 */
+    transform: scale(4.0);
 }
